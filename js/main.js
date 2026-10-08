@@ -1,27 +1,60 @@
 /* ==========================================================
    Workshop de Automação com Python · site de apresentação
+   ==========================================================
+
+   MAPA DESTE ARQUIVO
+     0. Atalhos (funções pequenas usadas em todo o arquivo)
+     1. Navegação entre slides (teclado, bolinhas, barra de progresso)
+     2. Partículas de fundo
+     3. Efeitos de mouse (brilho, botões magnéticos, cartões 3D)
+     4. Capa (título embaralhado + terminal digitando)
+     5. Slide "Quem aqui já..." (contador de mãos)
+     6. Slide "Manual vs Python" (barras)
+     7. Slide "Por que Python" (código digitando)
+     8. Slide dos cursos (cartões que viram)
+     9. Demo do organizador de pastas
+    10. Demo dos certificados
+    11. Lightbox (imagem ampliada)
+    12. Slide final (palavra que troca, confete, QR code)
+    13. Confete
+
+   COMO ADICIONAR UM SLIDE NOVO
+     No index.html, copie um bloco <section class="slide" data-titulo="...">
+     inteiro e cole onde quiser. Não precisa mexer aqui: as bolinhas,
+     o contador e a navegação se ajustam sozinhos.
+     - data-titulo: o nome que aparece ao passar o mouse na bolinha
+     - class="reveal": o elemento aparece com animação quando o slide entra
+     - style="--d:.2s": atraso dessa animação (para aparecerem em sequência)
    ========================================================== */
 
+/* ---------- 0. ATALHOS ---------- */
+// $(".classe") pega UM elemento; $$(".classe") pega TODOS, já como lista (array)
 const $ = (sel, raiz = document) => raiz.querySelector(sel);
 const $$ = (sel, raiz = document) => [...raiz.querySelectorAll(sel)];
+// await esperar(500) pausa uma função "async" por 500 milissegundos
 const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
 const aleatorio = (min, max) => Math.random() * (max - min) + min;
 const sortear = (lista) => lista[Math.floor(Math.random() * lista.length)];
+// true se a pessoa pediu ao sistema "menos animações" (acessibilidade)
 const MOVIMENTO_REDUZIDO = matchMedia("(prefers-reduced-motion: reduce)").matches;
+// true em telas de toque (celular/tablet), onde não existe "passar o mouse"
 const TOQUE = matchMedia("(hover: none)").matches;
 
 /* ==========================================================
    1. NAVEGAÇÃO ENTRE SLIDES
    ========================================================== */
+// Todos os <section class="slide"> do index.html, na ordem em que aparecem
 const slides = $$(".slide");
 const dotsNav = $(".dots");
 const barra = $(".progresso-barra");
 const atualEl = $("#slide-atual");
+// "ganchos": funções que rodam toda vez que um slide entra na tela (ver aoEntrar)
 const ganchos = new Map(slides.map((s) => [s, []]));
 let atual = 0;
 
 $("#slide-total").textContent = slides.length;
 
+// cria uma bolinha de navegação (lado direito) para cada slide
 slides.forEach((slide, i) => {
   const dot = document.createElement("button");
   dot.dataset.titulo = slide.dataset.titulo;
@@ -30,15 +63,19 @@ slides.forEach((slide, i) => {
   dotsNav.appendChild(dot);
 });
 
+// aoEntrar(elemento, funcao): roda "funcao" sempre que o slide que contém
+// "elemento" aparecer na tela. É assim que as animações recomeçam ao voltar a um slide.
 function aoEntrar(elemento, fn) {
   ganchos.get(elemento.closest(".slide")).push(fn);
 }
 
+// rola a página até o slide de número i (0 = primeiro)
 function irPara(i) {
   i = Math.max(0, Math.min(slides.length - 1, i));
   slides[i].scrollIntoView({ behavior: MOVIMENTO_REDUZIDO ? "auto" : "smooth" });
 }
 
+// atualiza o contador "3 / 11", a barra de progresso e a bolinha ativa
 function marcarAtual(i) {
   atual = i;
   atualEl.textContent = i + 1;
@@ -46,6 +83,9 @@ function marcarAtual(i) {
   $$("button", dotsNav).forEach((d, j) => d.classList.toggle("ativo", j === i));
 }
 
+// IntersectionObserver avisa quando um elemento entra ou sai da tela.
+// Quando um slide aparece: ganha a classe "visivel" (que dispara as animações .reveal
+// no CSS), vira o slide atual e roda os seus ganchos.
 const observador = new IntersectionObserver(
   (entradas) => {
     entradas.forEach((e) => {
@@ -62,6 +102,7 @@ const observador = new IntersectionObserver(
 );
 slides.forEach((s) => observador.observe(s));
 
+// TECLADO: setas, PageUp/PageDown (passador de slides), espaço, Home/End e F (tela cheia)
 let jaNavegou = false;
 document.addEventListener("keydown", (e) => {
   if (e.altKey || e.ctrlKey || e.metaKey) return;
@@ -69,6 +110,7 @@ document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") fecharLightbox();
     return;
   }
+  // se o foco estiver num botão ou link, o espaço deve "clicar" nele, e não trocar de slide
   const alvo = e.target.closest("button, a, summary, input, textarea, [tabindex]");
   const proximo = ["ArrowDown", "ArrowRight", "PageDown"];
   const anterior = ["ArrowUp", "ArrowLeft", "PageUp"];
@@ -85,6 +127,7 @@ document.addEventListener("keydown", (e) => {
     alternarTelaCheia();
   } else return;
 
+  // na primeira vez que alguém navega, a dica "← → navegar" some depois de 4 s
   if (!jaNavegou) {
     jaNavegou = true;
     setTimeout(() => ($(".dica-teclado").style.opacity = "0"), 4000);
@@ -96,9 +139,13 @@ function alternarTelaCheia() {
   else document.exitFullscreen?.();
 }
 
+// qualquer elemento com data-ir="N" leva ao slide N quando clicado
+// (ex.: o botão "Começar" tem data-ir="1"; o selo da professora tem data-ir="0")
 $$("[data-ir]").forEach((b) => b.addEventListener("click", () => irPara(+b.dataset.ir)));
 
-// selo da professora: memoji vira a estrela de tempos em tempos
+// selo da professora: memoji vira a estrela de tempos em tempos.
+// PARA EDITAR: 9000 = a cada 9 s; 2200 = quanto tempo a estrela fica virada.
+// As imagens ficam em assets/memoji.png e assets/estrela.png
 const selo = $(".professora");
 setInterval(() => {
   selo.classList.add("virado");
@@ -108,15 +155,21 @@ setInterval(() => {
 /* ==========================================================
    2. PARTÍCULAS DE FUNDO (rede de pontos + símbolos Python)
    ========================================================== */
+// Desenha num <canvas> que cobre a tela toda: pontinhos que se movem, linhas
+// ligando os pontos próximos (e o mouse) e símbolos do Python subindo devagar.
+// A função se chama sozinha (function(){...})() só para não "vazar" variáveis.
 (function particulas() {
   const canvas = $("#particulas");
   const ctx = canvas.getContext("2d");
+  // PARA EDITAR: os símbolos que sobem no fundo
   const SIMBOLOS = ["{ }", "( )", "def", "for", "if", "import", ":", "[ ]", "#", "py", "==", "in", "\u{1F40D}"];
   let pontos = [];
   let simbolos = [];
   let largura, altura, dpr;
   const mouse = { x: -9999, y: -9999 };
 
+  // recalcula o tamanho do canvas e cria os pontos (mais pontos em telas maiores).
+  // dpr = densidade da tela (2 em telas Retina), para o desenho ficar nítido
   function redimensionar() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     largura = canvas.width = innerWidth * dpr;
@@ -130,6 +183,7 @@ setInterval(() => {
     simbolos = Array.from({ length: Math.round(qtd / 4) }, () => novoSimbolo(true));
   }
 
+  // cria um símbolo com posição, velocidade, tamanho e transparência sorteados
   function novoSimbolo(inicial) {
     return {
       t: sortear(SIMBOLOS),
@@ -142,12 +196,14 @@ setInterval(() => {
     };
   }
 
+  // desenha UM quadro da animação; requestAnimationFrame chama de novo ~60x por segundo
   function desenhar() {
     ctx.clearRect(0, 0, largura, altura);
     const raio = 130 * dpr;
 
     for (const p of pontos) {
       p.x += p.vx; p.y += p.vy;
+      // bateu na borda? inverte a direção
       if (p.x < 0 || p.x > largura) p.vx *= -1;
       if (p.y < 0 || p.y > altura) p.vy *= -1;
 
@@ -162,6 +218,7 @@ setInterval(() => {
       ctx.fill();
     }
 
+    // liga cada par de pontos próximos; quanto mais perto, mais forte a linha
     for (let i = 0; i < pontos.length; i++) {
       for (let j = i + 1; j < pontos.length; j++) {
         const a = pontos[i], b = pontos[j];
@@ -181,6 +238,7 @@ setInterval(() => {
       }
     }
 
+    // símbolos sobem; quando saem pelo topo, nasce um novo lá embaixo
     for (let i = 0; i < simbolos.length; i++) {
       const s = simbolos[i];
       s.y -= s.v;
@@ -194,6 +252,7 @@ setInterval(() => {
       ctx.restore();
     }
 
+    // aba escondida = pausa a animação (economiza bateria)
     if (!document.hidden) requestAnimationFrame(desenhar);
   }
 
@@ -209,7 +268,10 @@ setInterval(() => {
    3. BRILHO QUE SEGUE O MOUSE + BOTÕES MAGNÉTICOS + CARDS 3D
    ========================================================== */
 (function efeitosDeMouse() {
-  if (TOQUE) return;
+  if (TOQUE) return;   // no celular não há mouse, então nada disso é necessário
+
+  // brilho azul que segue o mouse com um pequeno "atraso" (fica mais suave):
+  // a cada quadro ele anda 12% da distância que falta até o mouse
   const brilho = $(".cursor-glow");
   let alvoX = innerWidth / 2, alvoY = innerHeight / 2, x = alvoX, y = alvoY;
   addEventListener("pointermove", (e) => {
@@ -222,6 +284,7 @@ setInterval(() => {
     requestAnimationFrame(seguir);
   })();
 
+  // botões com class="magnetico" são "puxados" na direção do mouse
   $$(".magnetico").forEach((btn) => {
     btn.addEventListener("pointermove", (e) => {
       const r = btn.getBoundingClientRect();
@@ -232,6 +295,8 @@ setInterval(() => {
     btn.addEventListener("pointerleave", () => (btn.style.transform = ""));
   });
 
+  // cartões com class="tilt" inclinam em 3D conforme a posição do mouse,
+  // com um brilho amarelo no ponto onde o mouse está
   $$(".tilt").forEach((card) => {
     card.addEventListener("pointermove", (e) => {
       const r = card.getBoundingClientRect();
@@ -252,6 +317,9 @@ setInterval(() => {
 /* ==========================================================
    4. CAPA: texto embaralhado + terminal digitando
    ========================================================== */
+// Efeito "hacker" do título: as letras viram caracteres aleatórios e vão se
+// acertando da esquerda para a direita. Usado em elementos com class="scramble"
+// (o texto final fica no atributo data-text).
 function embaralhar(el) {
   const final = el.dataset.text;
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&*{}[]<>/\\=+0123456789";
@@ -271,6 +339,9 @@ $$(".scramble").forEach((el) => {
   el.addEventListener("mouseenter", () => embaralhar(el));
 });
 
+// PARA EDITAR: o que o terminal da capa "digita".
+// { cmd: "..." } é digitado letra por letra; { saida: "...", pausa: ms } aparece de uma vez.
+// Classes de cor: 'ok' verde, 'am' amarelo, 'az' azul, 'cz' cinza
 const ROTEIRO_TERMINAL = [
   { cmd: "py automatizar.py" },
   { saida: "<span class='cz'>Lendo a pasta Downloads...</span>", pausa: 500 },
@@ -283,6 +354,7 @@ const ROTEIRO_TERMINAL = [
   { saida: "<span class='az'>☕ Pode ir tomar um café.</span>", pausa: 600 },
 ];
 
+// executa o roteiro acima dentro do elemento "el", com um cursor piscando no final
 async function digitarTerminal(el, roteiro, prompt = "C:\\Jornada&gt; ") {
   if (el._rodando) return;
   el._rodando = true;
@@ -309,17 +381,21 @@ async function digitarTerminal(el, roteiro, prompt = "C:\\Jornada&gt; ") {
   el.innerHTML = html + cursor;
   el._rodando = false;
 }
-setTimeout(() => digitarTerminal($("#terminal-capa"), ROTEIRO_TERMINAL), 900);
+setTimeout(() => digitarTerminal($("#terminal-capa"), ROTEIRO_TERMINAL), 900);   // começa 0,9 s depois de abrir
 
 /* ==========================================================
    5. GANCHO: contador de mãos levantadas
    ========================================================== */
+// Cada clique num cartão soma 1 mão e solta um emoji de mão "voando".
+// Botão direito zera o contador daquele cartão.
 $$(".mao-card").forEach((card) => {
   let n = 0;
   const cont = $(".mao-cont", card);
   card.addEventListener("click", (e) => {
     n++;
     $("b", cont).textContent = n;
+    // truque para reiniciar uma animação CSS: tira a classe, força o navegador
+    // a recalcular (offsetWidth) e coloca a classe de volta
     cont.classList.remove("pulo"); void cont.offsetWidth; cont.classList.add("pulo");
     const mao = document.createElement("span");
     mao.className = "mao-voando";
@@ -340,6 +416,8 @@ $$(".mao-card").forEach((card) => {
 /* ==========================================================
    6. MANUAL vs PYTHON: barras de corrida
    ========================================================== */
+// conta de 0 até "alvo" em "duracao" milissegundos, começando rápido e
+// desacelerando no final (easing). Ex.: animarNumero(el, 50, 2000, " min")
 function animarNumero(el, alvo, duracao, sufixo = "") {
   const inicio = performance.now();
   (function passo(agora) {
@@ -350,8 +428,10 @@ function animarNumero(el, alvo, duracao, sufixo = "") {
   })(inicio);
 }
 
+// PARA EDITAR as tarefas e os tempos: mude no index.html os atributos
+// data-largura (tamanho da barra, em %), data-alvo (número) e data-sufixo (" min", " s"...)
 const corrida = $(".corrida");
-aoEntrar(corrida, () => {
+aoEntrar(corrida, () => {   // toda vez que o slide entra: zera as barras e anima de novo
   $$(".barra", corrida).forEach((b) => { b.style.transition = "none"; b.style.width = "0"; });
   $$(".tempo", corrida).forEach((t) => (t.textContent = "0"));
   void corrida.offsetWidth;
@@ -368,6 +448,10 @@ aoEntrar(corrida, () => {
 /* ==========================================================
    7. CÓDIGO PYTHON DIGITANDO + TRADUÇÃO
    ========================================================== */
+// PARA EDITAR o código que é "digitado". Cada linha é uma lista de pedaços
+// [texto, classe de cor]: 'kw' rosa (palavras do Python), 'fn' azul (funções),
+// 'st' verde (textos), 'at' amarelo (atributos); sem classe = branco.
+// A tradução em português fica no index.html (<ol id="traducao">), uma <li> por linha.
 const LINHAS_CODIGO = [
   [["for", "kw"], [" arquivo "], ["in", "kw"], [" pasta."], ["iterdir", "fn"], ["():"]],
   [["    "], ["if", "kw"], [" arquivo."], ["suffix", "at"], [" == "], ['".jpg"', "st"], [":"]],
@@ -376,6 +460,7 @@ const LINHAS_CODIGO = [
 const codigoEl = $("#codigo-python");
 let codigoRodando = false;
 
+// digita o código letra por letra e acende a tradução da linha correspondente
 async function digitarCodigo() {
   if (codigoRodando) return;
   codigoRodando = true;
@@ -407,6 +492,9 @@ aoEntrar(codigoEl, digitarCodigo);
 /* ==========================================================
    8. ÁREAS: virar cartões com clique (para telas de toque)
    ========================================================== */
+// No computador, os cartões viram ao passar o mouse (isso está no CSS).
+// Aqui é para celular e teclado: clicar ou apertar Enter também vira.
+// PARA EDITAR os cursos e os exemplos: mude direto no index.html (slide 5).
 $$(".area-card").forEach((c) => {
   c.addEventListener("click", () => c.classList.toggle("virado"));
   c.addEventListener("keydown", (e) => {
@@ -417,6 +505,7 @@ $$(".area-card").forEach((c) => {
 /* ==========================================================
    9. DEMO: ORGANIZADOR DE PASTAS
    ========================================================== */
+// PARA EDITAR: as pastas da demo (nome, ícone, cor da etiqueta e extensões)
 const CATEGORIAS = [
   { nome: "Imagens", icone: "🖼️", cor: "#e0559a", ext: ["jpg", "png", "gif"] },
   { nome: "Documentos", icone: "📄", cor: "#d9534f", ext: ["pdf", "docx", "txt"] },
@@ -425,12 +514,13 @@ const CATEGORIAS = [
   { nome: "Vídeos", icone: "🎬", cor: "#ff8c2b", ext: ["mp4"] },
   { nome: "Compactados", icone: "📦", cor: "#6c7a93", ext: ["zip", "rar"] },
 ];
+// nomes sorteados para os arquivos de mentira
 const NOMES_ARQUIVOS = [
   "foto_praia", "selfie", "IMG_2024", "print_tela", "meme", "trabalho_final", "resumo_aula",
   "contrato", "curriculo", "notas", "orcamento", "lista_presenca", "gastos", "musica",
   "podcast", "gravacao", "video_viagem", "tutorial", "backup", "slides",
 ];
-const QTD_ARQUIVOS = 32;
+const QTD_ARQUIVOS = 32;   // quantos arquivos aparecem bagunçados na mesa
 
 const mesa = $("#mesa");
 const areaArquivos = $("#mesa-arquivos");
@@ -439,6 +529,7 @@ const logEl = $("#log-organizador");
 const btnOrganizar = $("#btn-organizar");
 const btnBaguncar = $("#btn-baguncar");
 
+// cria as pastas amarelas, uma por categoria
 CATEGORIAS.forEach((cat) => {
   const p = document.createElement("div");
   p.className = "pasta";
@@ -447,6 +538,7 @@ CATEGORIAS.forEach((cat) => {
   pastasEl.appendChild(p);
 });
 
+// espalha os arquivos em posições e ângulos aleatórios e zera as pastas
 function baguncar() {
   areaArquivos.innerHTML = "";
   $$(".pasta-cont", pastasEl).forEach((c) => { c.textContent = "0"; c.classList.remove("on"); });
@@ -477,6 +569,7 @@ function baguncar() {
   btnOrganizar.disabled = false;
 }
 
+// permite arrastar um arquivo com o mouse (ou o dedo) antes de organizar
 function tornarArrastavel(el) {
   let ox, oy, arrastando = false;
   el.addEventListener("pointerdown", (e) => {
@@ -497,12 +590,14 @@ function tornarArrastavel(el) {
   });
 }
 
+// acrescenta uma linha no terminal da demo, mantendo o cursor no final
 function logar(linha) {
   const semCursor = logEl.innerHTML.replace(/<span class="cursor">▌<\/span>$/, "");
   logEl.innerHTML = semCursor + linha + "\n<span class=\"cursor\">▌</span>";
   logEl.scrollTop = logEl.scrollHeight;
 }
 
+// a "mágica": digita o comando e manda cada arquivo voando para a sua pasta
 async function organizar() {
   btnOrganizar.disabled = true;
   btnBaguncar.disabled = true;
@@ -523,11 +618,14 @@ async function organizar() {
     const pasta = $(`.pasta[data-nome="${arq.dataset.categoria}"]`, pastasEl);
     const icone = $(".pasta-icone", pasta).getBoundingClientRect();
     const r = arq.getBoundingClientRect();
+    // distância entre o centro do arquivo e o centro da pasta;
+    // o CSS anima o "translate" até lá (transition em .arquivo)
     const dx = icone.left + icone.width / 2 - (r.left + r.width / 2);
     const dy = icone.top + icone.height / 2 - (r.top + r.height / 2);
     arq.classList.add("voando");
     arq.style.transform = `translate(${dx}px, ${dy}px) rotate(0deg) scale(.35)`;
 
+    // quando o arquivo chega (750 ms), some e a pasta conta +1
     setTimeout(() => {
       arq.classList.add("sumiu");
       const cat = arq.dataset.categoria;
@@ -539,7 +637,7 @@ async function organizar() {
     }, 750);
 
     logar(`<span class="cz">${arq.dataset.nome.padEnd(22)}</span> → <span class="am">${arq.dataset.categoria}</span>`);
-    await esperar(i < 4 ? 260 : 85);
+    await esperar(i < 4 ? 260 : 85);   // os 4 primeiros vão devagar, depois acelera
   }
   await esperar(900);
   logar(`\n<span class="ok">Pronto! ${arquivos.length} arquivos organizados.</span>`);
@@ -549,7 +647,9 @@ async function organizar() {
 
 btnOrganizar.addEventListener("click", organizar);
 btnBaguncar.addEventListener("click", baguncar);
+// a bagunça é criada quando o slide aparece pela primeira vez
 aoEntrar(mesa, () => { if (!areaArquivos.children.length) baguncar(); });
+// se a janela mudar de tamanho, espalha de novo (para nada ficar fora da mesa)
 let tempoResize;
 addEventListener("resize", () => {
   clearTimeout(tempoResize);
@@ -559,6 +659,9 @@ addEventListener("resize", () => {
 /* ==========================================================
    10. DEMO: CERTIFICADOS
    ========================================================== */
+// PARA EDITAR: as linhas da planilha mostradas na demo [nome, curso, presente].
+// São as 10 primeiras linhas do inscritos.xlsx do material. As imagens que abrem ao
+// clicar num certificado ficam em assets/certificados/linhaN.png (N = número da linha, a partir de 0).
 const INSCRITOS = [
   ["Ana Costa Rodrigues", "Inteligência Artificial e Machine Learning", "Sim"],
   ["Bruno Oliveira Rocha", "Gestão Comercial", "Sim"],
@@ -582,6 +685,7 @@ const SIGLAS = {
   "Gestão Comercial": "Gestão Comercial",
   "Gestão de Recursos Humanos": "Gestão de RH",
 };
+// total de presentes na planilha completa (o contador termina nesse número)
 const TOTAL_CERTIFICADOS = 27;
 
 const corpoPlanilha = $("#planilha-corpo");
@@ -590,6 +694,7 @@ const numCert = $("#cert-num");
 const engrenagem = $("#engrenagem");
 const btnCert = $("#btn-certificados");
 
+// monta a tabela no HTML a partir da lista INSCRITOS
 function montarPlanilha() {
   corpoPlanilha.innerHTML = INSCRITOS.map(
     ([nome, curso, presente], i) =>
@@ -598,6 +703,7 @@ function montarPlanilha() {
 }
 montarPlanilha();
 
+// lê a planilha linha por linha: presente = certificado na pilha; ausente = linha riscada
 async function gerarCertificados() {
   btnCert.disabled = true;
   montarPlanilha();
@@ -645,6 +751,8 @@ btnCert.addEventListener("click", gerarCertificados);
 /* ==========================================================
    11. LIGHTBOX (imagens ampliadas)
    ========================================================== */
+// Mostra uma imagem grande por cima de tudo. Fecha clicando ou com Esc.
+// Imagens com class="zoomavel" abrem aqui ao serem clicadas.
 const lightbox = $("#lightbox");
 function abrirLightbox(src, alt) {
   const img = $("img", lightbox);
@@ -658,9 +766,11 @@ $$(".zoomavel").forEach((img) => img.addEventListener("click", () => abrirLightb
 /* ==========================================================
    12. FINAL: palavra que troca + QR code + confete
    ========================================================== */
+// PARA EDITAR: as palavras que se alternam em "Qual tarefa repetitiva da ___ ..."
 const PALAVRAS = ["sua área", "Segurança da Informação", "Ciência de Dados", "Gestão de TI", "Inteligência Artificial", "Publicidade", "Análise de Sistemas", "Gestão Comercial", "Recursos Humanos", "sua vida"];
 const rotativo = $("#rotativo");
 let idxPalavra = 0;
+// a cada 1,9 s: some (classe "trocando"), troca o texto e aparece de novo
 setInterval(() => {
   if (!$(".final").classList.contains("visivel")) return;
   rotativo.classList.add("trocando");
@@ -671,6 +781,7 @@ setInterval(() => {
   }, 300);
 }, 1900);
 
+// confete na primeira vez que o "Obrigado!" aparece; clicar nele solta mais
 let confeteFinalFeito = false;
 aoEntrar($(".obrigado"), () => {
   if (confeteFinalFeito) return;
@@ -679,6 +790,8 @@ aoEntrar($(".obrigado"), () => {
 });
 $(".obrigado").addEventListener("click", (e) => confete(120, e.clientX, e.clientY));
 
+// QR code com o endereço deste site (biblioteca qrcodejs, carregada no index.html).
+// Só aparece quando o site está publicado (http/https); abrindo o arquivo direto, ele some.
 (function qr() {
   const caixa = $("#qr-box");
   const online = location.protocol.startsWith("http");
@@ -692,11 +805,14 @@ $(".obrigado").addEventListener("click", (e) => confete(120, e.clientX, e.client
 /* ==========================================================
    13. CONFETE
    ========================================================== */
+// Cada pedacinho de confete é um retângulo colorido com posição, velocidade,
+// giro e "vida" (que diminui até ele sumir). A gravidade é o "vy += 0.32".
 const confeteCanvas = $("#confete");
 const cctx = confeteCanvas.getContext("2d");
 let pedacos = [];
 let confeteAtivo = false;
 
+// solta "qtd" pedaços a partir do ponto (x, y). Ex.: confete(100, 300, 200)
 function confete(qtd = 120, x = innerWidth / 2, y = innerHeight / 2) {
   if (MOVIMENTO_REDUZIDO) return;
   const dpr = Math.min(devicePixelRatio || 1, 2);
@@ -718,6 +834,7 @@ function confete(qtd = 120, x = innerWidth / 2, y = innerHeight / 2) {
   if (!confeteAtivo) { confeteAtivo = true; requestAnimationFrame(animarConfete); }
 }
 
+// move e desenha todos os pedaços; para sozinha quando não sobra nenhum
 function animarConfete() {
   cctx.clearRect(0, 0, innerWidth, innerHeight);
   pedacos.forEach((p) => {

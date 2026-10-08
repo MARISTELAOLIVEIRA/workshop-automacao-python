@@ -12,10 +12,23 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <!--
+    GUIA RÁPIDO PARA EDITAR
+    - Textos: mude direto aqui, dentro de cada <section class="slide">.
+    - Novo slide: copie uma <section class="slide" data-titulo="..."> inteira.
+      As bolinhas e o contador se ajustam sozinhos.
+    - class="reveal" + style="--d:.3s": o elemento aparece com animação, com 0,3 s de atraso.
+    - Dados das demos (planilha, pastas, código que é digitado, palavras do final):
+      ficam no js/main.js, nos trechos marcados com "PARA EDITAR".
+    - Cores: nas variáveis do topo do css/style.css.
+  -->
+
+  <!-- fundo animado e confete (desenhados pelo js/main.js) -->
   <canvas id="particulas" aria-hidden="true"></canvas>
   <canvas id="confete" aria-hidden="true"></canvas>
   <div class="cursor-glow" aria-hidden="true"></div>
 
+  <!-- navegação: barra de progresso, selo da professora, bolinhas, contador e dica -->
   <div class="progresso"><div class="progresso-barra"></div></div>
   <button class="professora" data-ir="0" aria-label="Profª Maristela Oliveira (Stela). Voltar ao início">
     <span class="prof-avatar">
@@ -310,11 +323,13 @@
     </section>
   </main>
 
+  <!-- janela que mostra uma imagem ampliada (certificado, gráfico) -->
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Imagem ampliada">
     <img alt="">
     <button class="lightbox-fechar" aria-label="Fechar">✕</button>
   </div>
 
+  <!-- qrcodejs gera o QR code do slide final; main.js tem toda a interatividade -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
   <script src="js/main.js" defer></script>
 </body>

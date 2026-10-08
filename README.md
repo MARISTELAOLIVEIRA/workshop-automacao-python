@@ -16,6 +16,19 @@ Demos interativas:
 - **Organizador:** clique em `▶ py organizador.py`. Os arquivos podem ser arrastados
 - **Certificados:** clique em `▶ Gerar certificados` e depois num certificado para ver o PDF real
 
+## Como editar
+
+| Quero mudar... | Onde |
+|---|---|
+| Textos de qualquer slide | `index.html` (cada slide é uma `<section class="slide">`) |
+| Adicionar um slide | Copie uma `<section class="slide" data-titulo="...">` inteira no `index.html` |
+| Cores do site | Variáveis no topo do `css/style.css` (`:root`) |
+| Cursos e exemplos do slide 5 | `index.html`, slide "Serve para o seu curso também" |
+| Planilha da demo, pastas do organizador, código digitado, palavras do final | `js/main.js`, trechos marcados com **PARA EDITAR** |
+| Memoji, estrela e favicon | `assets/memoji.png`, `assets/estrela.png`, `assets/favicon.png` |
+
+Os três arquivos têm comentários explicando cada parte.
+
 ## Publicar no GitHub Pages
 
 1. Crie um repositório no GitHub e envie estes arquivos

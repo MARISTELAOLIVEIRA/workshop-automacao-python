@@ -1,4 +1,18 @@
-/* ============ Tokens ============ */
+/* ==========================================================
+   Workshop de Automação com Python · estilos
+   ==========================================================
+   As seções seguem a ordem dos slides. Os nomes de classe batem com o index.html
+   e o js/main.js (ex.: .professora, .mesa, .planilha).
+
+   PARA EDITAR AS CORES: mude as variáveis em :root, logo abaixo.
+   Todo o resto do arquivo usa var(--nome), então a troca vale para o site inteiro.
+
+   UNIDADES ÚTEIS:
+     vw / vh = % da largura / altura da janela (1vw = 1% da largura)
+     clamp(min, ideal, máx) = tamanho que cresce com a tela, mas com limites
+   ========================================================== */
+
+/* ============ Tokens (cores, fontes e medidas) ============ */
 :root {
   --bg: #0a0f1f;
   --bg-2: #10182f;
@@ -22,6 +36,8 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; }
+/* "scroll snap": em telas grandes, a rolagem sempre "encaixa" num slide inteiro,
+   como numa apresentação. No celular fica desligado, para rolar livremente. */
 @media (min-width: 900px) and (min-height: 600px) {
   html { scroll-snap-type: y mandatory; }
 }
@@ -43,6 +59,8 @@ code, pre, kbd { font-family: var(--mono); font-variant-ligatures: none; }
 img { max-width: 100%; display: block; }
 
 /* ============ Camadas de fundo ============ */
+/* Os dois <canvas> (partículas e confete) ficam fixos cobrindo a tela.
+   pointer-events: none = os cliques "atravessam" e chegam no conteúdo. */
 #particulas, #confete {
   position: fixed; inset: 0; width: 100%; height: 100%;
   pointer-events: none;
@@ -105,6 +123,8 @@ kbd {
 }
 
 /* ============ Selo da professora ============ */
+/* Fixo no canto superior direito (position: fixed), aparece em todos os slides.
+   row-reverse coloca a foto à direita do texto. */
 .professora {
   position: fixed; top: 16px; right: 20px; z-index: 55;
   display: flex; flex-direction: row-reverse; align-items: center; gap: 11px;
@@ -125,6 +145,9 @@ kbd {
   box-shadow: 0 0 0 2px rgba(255,212,59,.55), 0 6px 16px rgba(0,0,0,.4);
   perspective: 300px;
 }
+/* O memoji e a estrela ficam "costas com costas", como uma moeda.
+   Girar 180° (rotateY) mostra o outro lado; backface-visibility esconde o lado de trás.
+   O JS acrescenta a classe .virado de tempos em tempos. */
 .prof-flip {
   position: absolute; inset: 0;
   transform-style: preserve-3d;
@@ -149,6 +172,8 @@ kbd {
 .prof-texto small { font-size: 12px; color: var(--suave); }
 
 /* ============ Slides ============ */
+/* Cada slide ocupa pelo menos a altura da tela (100vh) e centraliza o conteúdo.
+   O padding de cima é maior para o conteúdo não ficar embaixo do selo. */
 .slide {
   min-height: 100vh; min-height: 100svh;
   display: flex; align-items: center; justify-content: center;
@@ -187,6 +212,9 @@ mark {
 .centro { text-align: center; margin-top: 22px; }
 
 /* reveal ao entrar na tela */
+/* ANIMAÇÃO DE ENTRADA: todo elemento com class="reveal" começa invisível e um
+   pouco abaixo. Quando o JS marca o slide como .visivel, ele sobe e aparece.
+   O atraso vem de style="--d:.3s" no HTML, para os itens entrarem em sequência. */
 .reveal {
   opacity: 0; transform: translateY(34px) scale(.98);
   transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);
@@ -337,7 +365,12 @@ mark {
 .pilar b { font-size: clamp(15px, 1.4vw, 19px); }
 .pilar small { color: var(--suave); }
 
-/* ============ 5. Áreas ============ */
+/* ============ 5. Áreas (cursos) ============ */
+/* Cartões que viram: frente e verso ficam um sobre o outro; ao passar o mouse
+   (ou com a classe .virado), o .area-inner gira 180° e mostra o verso.
+   Flex com wrap + justify-content: center deixa a última fileira centralizada.
+   PARA MUDAR QUANTOS CARTÕES POR FILEIRA: troque o "/ 5" (e o "4 *", que é o
+   número de espaços entre eles) em .areas-grid .area-card. */
 .areas-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(12px, 1.6vw, 20px); margin-top: 18px; }
 .areas-grid .area-card { flex: 0 0 calc((100% - 4 * clamp(12px, 1.6vw, 20px)) / 5); }
 .area-card { perspective: 900px; height: clamp(120px, 22vh, 190px); outline: none; cursor: pointer; }
@@ -363,6 +396,9 @@ mark {
 .area-voce .area-verso { background: linear-gradient(135deg, #b8860b, #e0a800); color: #1a1405; }
 
 /* ============ 6. Organizador ============ */
+/* .mesa = a área quadriculada. Os arquivos (.arquivo) têm posição absoluta,
+   sorteada pelo JS. O formato de folha com a ponta dobrada é feito com clip-path.
+   O "voo" até a pasta é a transition de transform em .arquivo. */
 .riscado { position: relative; color: var(--suave); }
 .riscado::after {
   content: ""; position: absolute; left: -4px; right: -4px; top: 55%; height: 5px;
@@ -438,6 +474,9 @@ mark {
 .demo-botoes .btn { justify-content: center; font-family: var(--mono); }
 
 /* ============ 7. Certificados ============ */
+/* .planilha imita o Excel (fundo branco, cabeçalho verde). As linhas recebem
+   .lendo (amarelo), .feito (verde) ou .pulado (riscado) durante a demo.
+   Os .mini-cert são posicionados com as variáveis --x, --y e --r sorteadas no JS. */
 .cert-grid { display: grid; grid-template-columns: 1.25fr auto 1.1fr; gap: 22px; align-items: center; }
 .planilha { background: #fff; color: #1d2433; border-radius: 12px; overflow: hidden; box-shadow: var(--sombra); }
 .planilha-barra { background: #1e7145; color: #fff; padding: 8px 14px; font-size: 14px; font-weight: 700; }
@@ -591,6 +630,8 @@ mark {
 .lightbox-fechar { position: absolute; top: 20px; right: 26px; font-size: 26px; color: #fff; }
 
 /* ============ Responsivo ============ */
+/* Até 900px de largura (tablet/celular): tudo vira uma coluna, e somem as
+   bolinhas, a dica de teclado e o brilho do mouse. */
 @media (max-width: 900px) {
   .capa-grid, .duas-colunas, .demo-grid, .massa-grid, .final-grid, .erros { grid-template-columns: 1fr; }
   .maos-grid, .cuidados-grid { grid-template-columns: 1fr 1fr; }
@@ -622,6 +663,8 @@ mark {
   .planilha td:nth-child(3), .planilha th:nth-child(3) { display: none; }
 }
 
+/* Acessibilidade: se a pessoa pediu "reduzir movimento" no sistema, as animações
+   ficam instantâneas. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   html { scroll-behavior: auto; }
