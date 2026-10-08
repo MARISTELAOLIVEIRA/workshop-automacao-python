@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automação com Python · Jornada Interdisciplinar</title>
+  <meta name="description" content="Workshop de Automação com Python: faça o computador trabalhar por você.">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <canvas id="particulas" aria-hidden="true"></canvas>
+  <canvas id="confete" aria-hidden="true"></canvas>
+  <div class="cursor-glow" aria-hidden="true"></div>
+
+  <div class="progresso"><div class="progresso-barra"></div></div>
+  <button class="professora" data-ir="0" aria-label="Profª Maristela Oliveira (Stela). Voltar ao início">
+    <span class="prof-avatar">
+      <span class="prof-flip">
+        <img class="prof-face" src="assets/memoji.png" alt="">
+        <img class="prof-face prof-verso" src="assets/estrela.png" alt="">
+      </span>
+    </span>
+    <span class="prof-texto">
+      <b>Profª Maristela Oliveira</b>
+      <small>pode chamar de Stela 😉</small>
+    </span>
+  </button>
+  <nav class="dots" aria-label="Navegação entre seções"></nav>
+  <div class="contador-slide"><span id="slide-atual">1</span> / <span id="slide-total">11</span></div>
+  <div class="dica-teclado">
+    <kbd>←</kbd><kbd>→</kbd> navegar · <kbd>F</kbd> tela cheia
+  </div>
+
+  <main>
+    <!-- 1. CAPA -->
+    <section class="slide capa" data-titulo="Início">
+      <div class="wrap capa-grid">
+        <div>
+          <p class="kicker reveal">Jornada Interdisciplinar · Workshop</p>
+          <h1 class="reveal" style="--d:.1s">
+            <span class="scramble" data-text="Automação">Automação</span><br>
+            com <span class="sem-quebra"><span class="py-badge">Python</span><span class="cobra">🐍</span></span>
+          </h1>
+          <p class="subtitulo reveal" style="--d:.25s">
+            Faça o computador trabalhar <strong class="hl">por você</strong>.
+          </p>
+          <div class="capa-acoes reveal" style="--d:.4s">
+            <button class="btn btn-primario magnetico" data-ir="1">Começar <span>→</span></button>
+            <a class="btn btn-ghost magnetico" href="material/material_alunos.zip" download>⬇ Material</a>
+          </div>
+        </div>
+        <div class="terminal reveal" style="--d:.3s">
+          <div class="terminal-barra"><i></i><i></i><i></i><span>C:\Jornada</span></div>
+          <pre class="terminal-corpo" id="terminal-capa"></pre>
+        </div>
+      </div>
+      <div class="scroll-hint">role ou use as setas <span>↓</span></div>
+    </section>
+
+    <!-- 2. GANCHO -->
+    <section class="slide" data-titulo="Quem nunca?">
+      <div class="wrap">
+        <p class="kicker reveal">01 · O problema</p>
+        <h2 class="reveal" style="--d:.1s">Quem aqui <span class="hl">já</span>...</h2>
+        <div class="maos-grid">
+          <button class="mao-card tilt reveal" style="--d:.2s">
+            <span class="mao-emoji">📁</span>
+            <span class="mao-texto">renomeou <strong>50 arquivos</strong> na mão?</span>
+            <span class="mao-cont" aria-live="polite">✋ <b>0</b></span>
+          </button>
+          <button class="mao-card tilt reveal" style="--d:.35s">
+            <span class="mao-emoji">📋</span>
+            <span class="mao-texto">copiou dados de uma planilha <strong>linha por linha</strong>?</span>
+            <span class="mao-cont" aria-live="polite">✋ <b>0</b></span>
+          </button>
+          <button class="mao-card tilt reveal" style="--d:.5s">
+            <span class="mao-emoji">📜</span>
+            <span class="mao-texto">preencheu <strong>30 certificados</strong> um por um?</span>
+            <span class="mao-cont" aria-live="polite">✋ <b>0</b></span>
+          </button>
+        </div>
+        <p class="nota reveal" style="--d:.7s">Clique nos cartões para contar as mãos levantadas 👆</p>
+      </div>
+    </section>
+
+    <!-- 3. O QUE É AUTOMAÇÃO -->
+    <section class="slide" data-titulo="O que é automação">
+      <div class="wrap duas-colunas">
+        <div>
+          <p class="kicker reveal">02 · O conceito</p>
+          <h2 class="reveal" style="--d:.1s">O que é <span class="hl">automação</span>?</h2>
+          <p class="grande reveal" style="--d:.2s">
+            É pedir para o computador fazer as tarefas
+            <mark>repetitivas</mark> e <mark>previsíveis</mark>, enquanto você
+            cuida do que exige criatividade.
+          </p>
+          <div class="regra reveal" style="--d:.35s">
+            <span class="regra-icone">💡</span>
+            <p><strong>Regra prática:</strong> se você faz <em>sempre do mesmo jeito</em>,
+            dá para automatizar.</p>
+          </div>
+        </div>
+        <div class="corrida reveal" style="--d:.3s">
+          <h3>Manual <span class="vs">vs</span> Python</h3>
+          <div class="tarefa">
+            <p>Organizar 300 arquivos</p>
+            <div class="barra-linha"><span class="rotulo">🙋 Manual</span><div class="barra manual" data-largura="100"></div><span class="tempo" data-alvo="50" data-sufixo=" min">0</span></div>
+            <div class="barra-linha"><span class="rotulo">🐍 Python</span><div class="barra python" data-largura="1.5"></div><span class="tempo" data-alvo="2" data-sufixo=" s">0</span></div>
+          </div>
+          <div class="tarefa">
+            <p>Gerar 30 certificados</p>
+            <div class="barra-linha"><span class="rotulo">🙋 Manual</span><div class="barra manual" data-largura="100"></div><span class="tempo" data-alvo="2" data-sufixo=" h">0</span></div>
+            <div class="barra-linha"><span class="rotulo">🐍 Python</span><div class="barra python" data-largura="1.5"></div><span class="tempo" data-alvo="3" data-sufixo=" s">0</span></div>
+          </div>
+          <p class="nota">*tempos estimados, só para ilustrar</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. POR QUE PYTHON -->
+    <section class="slide" data-titulo="Por que Python">
+      <div class="wrap">
+        <p class="kicker reveal">03 · A ferramenta</p>
+        <h2 class="reveal" style="--d:.1s">Por que <span class="hl">Python</span>?</h2>
+        <div class="codigo-traducao reveal" style="--d:.2s">
+          <div class="codigo-card">
+            <div class="terminal-barra"><i></i><i></i><i></i><span>organizador.py</span></div>
+            <pre class="codigo" id="codigo-python"></pre>
+          </div>
+          <div class="seta-traducao">⇄</div>
+          <div class="traducao-card">
+            <p class="traducao-titulo">Em português:</p>
+            <ol class="traducao" id="traducao">
+              <li>para cada arquivo na pasta:</li>
+              <li>se a extensão for ".jpg":</li>
+              <li>mova o arquivo para "Imagens"</li>
+            </ol>
+          </div>
+        </div>
+        <div class="pilares">
+          <div class="pilar tilt reveal" style="--d:.3s"><span>📖</span><b>Fácil de ler</b><small>Parece inglês</small></div>
+          <div class="pilar tilt reveal" style="--d:.4s"><span>💸</span><b>Gratuito</b><small>Para sempre</small></div>
+          <div class="pilar tilt reveal" style="--d:.5s"><span>🧰</span><b>Bibliotecas</b><small>Planilhas, PDF, web...</small></div>
+          <div class="pilar tilt reveal" style="--d:.6s"><span>🌎</span><b>Comunidade</b><small>Ajuda em todo lugar</small></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ÁREAS -->
+    <section class="slide" data-titulo="Em todas as áreas">
+      <div class="wrap">
+        <p class="kicker reveal">04 · Interdisciplinar</p>
+        <h2 class="reveal" style="--d:.1s">Serve para a <span class="hl">sua área</span> também</h2>
+        <p class="nota reveal" style="--d:.15s">Passe o mouse (ou clique) nos cartões</p>
+        <div class="areas-grid">
+          <div class="area-card reveal" style="--d:.15s" tabindex="0"><div class="area-inner"><div class="area-frente"><span>💼</span><b>Administração</b></div><div class="area-verso">Juntar as planilhas de vendas de 10 filiais num relatório único</div></div></div>
+          <div class="area-card reveal" style="--d:.2s" tabindex="0"><div class="area-inner"><div class="area-frente"><span>🍎</span><b>Pedagogia</b></div><div class="area-verso">Gerar boletins, listas de presença e certificados em lote</div></div></div>
+          <div class="area-card reveal" style="--d:.25s" tabindex="0"><div class="area-inner"><div class="area-frente"><span>🏗️</span><b>Engenharias</b></div><div class="area-verso">Processar planilhas de medições e gerar gráficos sozinho</div></div></div>
+          <div class="area-card reveal" style="--d:.3s" tabindex="0"><div class="area-inner"><div class="area-frente"><span>🎨</span><b>Design</b></div><div class="area-verso">Redimensionar e renomear 500 imagens de uma vez</div></div></div>
+          <div class="area-card reveal" style="--d:.35s" tabindex="0"><div class="area-inner"><div class="area-frente"><span>🩺</span><b>Saúde</b></div><div class="area-verso">Organizar e anonimizar dados de pesquisa</div></div></div>
+          <div class="area-card reveal" style="--d:.4s" tabindex="0"><div class="area-inner"><div class="area-frente"><span>⚖️</span><b>Direito</b></div><div class="area-verso">Buscar termos em centenas de PDFs de processos</div></div></div>
+          <div class="area-card reveal" style="--d:.45s" tabindex="0"><div class="area-inner"><div class="area-frente"><span>💻</span><b>Computação</b></div><div class="area-verso">Bots, integração entre sistemas, testes automáticos...</div></div></div>
+          <div class="area-card area-voce reveal" style="--d:.5s" tabindex="0"><div class="area-inner"><div class="area-frente"><span>❓</span><b>E você?</b></div><div class="area-verso">Qual tarefa repetitiva <em>você</em> faz toda semana?</div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. DEMO ORGANIZADOR -->
+    <section class="slide" data-titulo="Demo: organizador">
+      <div class="wrap">
+        <p class="kicker reveal">05 · Ao vivo</p>
+        <h2 class="reveal" style="--d:.1s">Uma pasta <span class="riscado">bagunçada</span> <span class="hl">organizada</span> em segundos</h2>
+        <div class="demo-grid reveal" style="--d:.2s">
+          <div class="mesa" id="mesa">
+            <div class="mesa-arquivos" id="mesa-arquivos"></div>
+            <div class="pastas" id="pastas"></div>
+          </div>
+          <div class="demo-lateral">
+            <div class="terminal mini">
+              <div class="terminal-barra"><i></i><i></i><i></i><span>terminal</span></div>
+              <pre class="terminal-corpo log" id="log-organizador">C:\Pratica1&gt; <span class="cursor">▌</span></pre>
+            </div>
+            <div class="demo-botoes">
+              <button class="btn btn-primario magnetico" id="btn-organizar">▶ py organizador.py</button>
+              <button class="btn btn-ghost" id="btn-baguncar">↺ Bagunçar de novo</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. DEMO CERTIFICADOS -->
+    <section class="slide" data-titulo="Demo: certificados">
+      <div class="wrap">
+        <p class="kicker reveal">06 · Ao vivo</p>
+        <h2 class="reveal" style="--d:.1s">De uma planilha para <span class="hl">27 certificados</span></h2>
+        <div class="cert-grid reveal" style="--d:.2s">
+          <div class="planilha">
+            <div class="planilha-barra">📊 inscritos.xlsx</div>
+            <table>
+              <thead><tr><th></th><th>Nome</th><th>Curso</th><th>Presente</th></tr></thead>
+              <tbody id="planilha-corpo"></tbody>
+            </table>
+          </div>
+          <div class="cert-centro">
+            <button class="btn btn-primario magnetico" id="btn-certificados">▶ Gerar certificados</button>
+            <div class="engrenagem" id="engrenagem">⚙️</div>
+            <div class="cert-contador"><b id="cert-num">0</b><span>PDFs gerados</span></div>
+          </div>
+          <div class="pilha" id="pilha">
+            <p class="pilha-vazia">os certificados aparecem aqui</p>
+          </div>
+        </div>
+        <p class="nota reveal" style="--d:.3s">Na planilha completa: 30 inscritos → 27 presentes → 27 PDFs. Clique num certificado para ver o PDF de verdade.</p>
+      </div>
+    </section>
+
+    <!-- 8. CUIDADOS -->
+    <section class="slide" data-titulo="Cuidados">
+      <div class="wrap">
+        <p class="kicker reveal">07 · Com responsabilidade</p>
+        <h2 class="reveal" style="--d:.1s">Grandes poderes, <span class="hl">grandes cuidados</span></h2>
+        <div class="cuidados-grid">
+          <div class="cuidado tilt reveal" style="--d:.2s"><span>🧪</span><h3>Teste numa cópia</h3><p>Um script errado também é rápido para estragar tudo.</p></div>
+          <div class="cuidado tilt reveal" style="--d:.3s"><span>🔒</span><h3>Dados pessoais</h3><p>Nomes, e-mails e CPFs são protegidos pela LGPD.</p></div>
+          <div class="cuidado tilt reveal" style="--d:.4s"><span>🌐</span><h3>Respeite os sites</h3><p>Antes de coletar dados, leia os termos de uso.</p></div>
+          <div class="cuidado tilt reveal" style="--d:.5s"><span>🤖</span><h3>IA ajuda, mas...</h3><p>...você precisa entender o código que vai rodar.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. MÃO NA MASSA -->
+    <section class="slide" data-titulo="Mão na massa">
+      <div class="wrap">
+        <p class="kicker reveal">08 · Agora é com vocês</p>
+        <h2 class="reveal" style="--d:.1s">Mão na <span class="hl">massa</span> 🛠️</h2>
+        <ol class="timeline">
+          <li class="reveal" style="--d:.15s"><time>0:20</time><b>Conferir o ambiente</b><small>verificar_ambiente.py</small></li>
+          <li class="reveal" style="--d:.25s"><time>0:25</time><b>Prática 1</b><small>Organizador de pastas</small></li>
+          <li class="reveal" style="--d:.35s"><time>0:55</time><b>Prática 2</b><small>Certificados automáticos</small></li>
+          <li class="reveal" style="--d:.45s"><time>1:45</time><b>Desafios bônus</b><small>Gráfico e web scraping</small></li>
+          <li class="reveal" style="--d:.55s"><time>2:00</time><b>Encerramento</b><small>E agora?</small></li>
+        </ol>
+        <div class="massa-grid">
+          <div class="como-rodar reveal" style="--d:.5s">
+            <h3>Como rodar um script</h3>
+            <div class="passos">
+              <div class="passo"><span class="num">1</span>Botão direito no arquivo <code>.py</code></div>
+              <div class="passo"><span class="num">2</span><b>Edit with IDLE</b><small>(Windows 11: "Mostrar mais opções")</small></div>
+              <div class="passo"><span class="num">3</span>Aperte <kbd class="kbd-grande">F5</kbd></div>
+            </div>
+            <p class="lacuna-dica">Preencha as lacunas <code class="lacuna">___</code>. Se aparecer <code>NameError: name '___'</code>, é só sinal de que falta completar alguma!</p>
+          </div>
+          <div class="bonus-preview reveal" style="--d:.6s">
+            <h3>Bônus: relatório com gráfico</h3>
+            <img src="assets/grafico-participantes.png" alt="Gráfico de barras com o número de participantes do workshop por curso" class="zoomavel">
+          </div>
+        </div>
+        <div class="centro reveal" style="--d:.7s">
+          <a class="btn btn-primario magnetico" href="material/material_alunos.zip" download>⬇ Baixar o material</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. SOCORRO -->
+    <section class="slide" data-titulo="Socorro!">
+      <div class="wrap">
+        <p class="kicker reveal">09 · Deu erro?</p>
+        <h2 class="reveal" style="--d:.1s">Calma, <span class="hl">erro faz parte</span> 😅</h2>
+        <div class="erros">
+          <details class="reveal" style="--d:.15s"><summary><code>NameError: name '___' is not defined</code></summary><p>Ainda tem lacuna sem preencher. Procure os <code>___</code> no arquivo.</p></details>
+          <details class="reveal" style="--d:.2s"><summary><code>ModuleNotFoundError: No module named 'pandas'</code></summary><p>Falta instalar a biblioteca. No terminal: <code>py -m pip install --user pandas openpyxl</code></p></details>
+          <details class="reveal" style="--d:.25s"><summary><code>'py' não é reconhecido como um comando...</code></summary><p>Troque <code>py</code> por <code>python</code>. Ou abra o arquivo pelo IDLE e aperte F5.</p></details>
+          <details class="reveal" style="--d:.3s"><summary><code>FileNotFoundError: ... pasta_baguncada</code></summary><p>Rode primeiro o <code>criar_bagunca.py</code>.</p></details>
+          <details class="reveal" style="--d:.35s"><summary><code>PermissionError</code> ao gerar o PDF</summary><p>O certificado está aberto no leitor de PDF. Feche e rode de novo.</p></details>
+          <details class="reveal" style="--d:.4s"><summary><code>IndentationError</code></summary><p>Os espaços no começo da linha estão desalinhados. Em Python, o alinhamento importa!</p></details>
+          <details class="reveal" style="--d:.45s"><summary><code>KeyError: 'Nome'</code></summary><p>O nome da coluna está diferente da planilha. Confira maiúsculas e acentos.</p></details>
+        </div>
+        <p class="nota reveal" style="--d:.5s">Ainda travado? Levante a mão ✋ e chame quem está circulando pela sala.</p>
+      </div>
+    </section>
+
+    <!-- 11. ENCERRAMENTO -->
+    <section class="slide final" data-titulo="E agora?">
+      <div class="wrap">
+        <p class="kicker reveal">10 · E agora?</p>
+        <h2 class="pergunta reveal" style="--d:.1s">Qual tarefa repetitiva da <span class="hl rotativo" id="rotativo">sua área</span> você vai automatizar?</h2>
+        <div class="final-grid">
+          <div class="recursos reveal" style="--d:.3s">
+            <h3>Para continuar estudando</h3>
+            <ul>
+              <li><b>📗 Automate the Boring Stuff with Python</b><span>Al Sweigart: gratuito online, em inglês. Em português: <em>Automatize tarefas maçantes com Python</em>.</span></li>
+              <li><b>🐼 10 minutes to pandas</b><span>O guia rápido oficial do pandas.</span></li>
+              <li><b>🐍 python.org.br</b><span>Comunidade Python Brasil.</span></li>
+            </ul>
+          </div>
+          <div class="qr-box reveal" style="--d:.4s" id="qr-box">
+            <div id="qr"></div>
+            <p>Abra este site no celular</p>
+          </div>
+        </div>
+        <p class="obrigado reveal" style="--d:.6s"><span class="obrigado-texto">Obrigado!</span> 🎉</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Imagem ampliada">
+    <img alt="">
+    <button class="lightbox-fechar" aria-label="Fechar">✕</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>
