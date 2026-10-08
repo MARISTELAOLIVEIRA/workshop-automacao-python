@@ -338,7 +338,8 @@ mark {
 .pilar small { color: var(--suave); }
 
 /* ============ 5. Áreas ============ */
-.areas-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(12px, 1.6vw, 20px); margin-top: 18px; }
+.areas-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(12px, 1.6vw, 20px); margin-top: 18px; }
+.areas-grid .area-card { flex: 0 0 calc((100% - 3 * clamp(12px, 1.6vw, 20px)) / 4); }
 .area-card { perspective: 900px; height: clamp(120px, 21vh, 180px); outline: none; cursor: pointer; }
 .area-inner {
   position: relative; width: 100%; height: 100%;
@@ -352,7 +353,7 @@ mark {
 }
 .area-frente { background: var(--painel); gap: 6px; }
 .area-frente span { font-size: clamp(34px, 3.6vw, 48px); }
-.area-frente b { font-size: clamp(15px, 1.4vw, 19px); }
+.area-frente b { font-size: clamp(14px, 1.25vw, 17px); line-height: 1.25; }
 .area-verso {
   transform: rotateY(180deg);
   background: linear-gradient(135deg, var(--azul-forte), #24507a);
@@ -588,7 +589,8 @@ mark {
 @media (max-width: 900px) {
   .capa-grid, .duas-colunas, .demo-grid, .massa-grid, .final-grid, .erros { grid-template-columns: 1fr; }
   .maos-grid, .cuidados-grid { grid-template-columns: 1fr 1fr; }
-  .areas-grid, .pilares { grid-template-columns: 1fr 1fr; }
+  .pilares { grid-template-columns: 1fr 1fr; }
+  .areas-grid .area-card { flex-basis: calc((100% - clamp(12px, 1.6vw, 20px)) / 2); }
   .codigo-traducao { grid-template-columns: 1fr; }
   .seta-traducao { transform: rotate(90deg); justify-self: center; animation: none; }
   .cert-grid { grid-template-columns: 1fr; }

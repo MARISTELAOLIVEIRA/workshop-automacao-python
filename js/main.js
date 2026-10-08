@@ -560,17 +560,26 @@ addEventListener("resize", () => {
    10. DEMO: CERTIFICADOS
    ========================================================== */
 const INSCRITOS = [
-  ["Ana Costa Rodrigues", "Engenharia Civil", "Sim"],
-  ["Bruno Oliveira Rocha", "Sistemas de Informação", "Sim"],
-  ["Camila Santos Barbosa", "Ciência da Computação", "Sim"],
-  ["Diego Carvalho Nascimento", "Sistemas de Informação", "Sim"],
-  ["Eduarda Rocha Carvalho", "Sistemas de Informação", "Não"],
-  ["Felipe Souza Pereira", "Design", "Sim"],
-  ["Gabriela Santos Dias", "Pedagogia", "Sim"],
-  ["Henrique Pereira Santos", "Pedagogia", "Não"],
-  ["Isabela Gomes Carvalho", "Ciência da Computação", "Sim"],
-  ["João Dias Gomes", "Pedagogia", "Não"],
+  ["Ana Costa Rodrigues", "Segurança da Informação", "Sim"],
+  ["Bruno Oliveira Rocha", "Gestão da Tecnologia da Informação", "Sim"],
+  ["Camila Santos Barbosa", "Segurança da Informação", "Sim"],
+  ["Diego Carvalho Nascimento", "Análise e Desenvolvimento de Sistemas", "Sim"],
+  ["Eduarda Rocha Carvalho", "Inteligência Artificial e Machine Learning", "Não"],
+  ["Felipe Souza Pereira", "Publicidade e Marketing", "Sim"],
+  ["Gabriela Santos Dias", "Inteligência Artificial e Machine Learning", "Sim"],
+  ["Henrique Pereira Santos", "Segurança da Informação", "Não"],
+  ["Isabela Gomes Carvalho", "Gestão da Tecnologia da Informação", "Sim"],
+  ["João Dias Gomes", "Análise e Desenvolvimento de Sistemas", "Não"],
 ];
+// siglas para caber na tabela da demo (o nome completo aparece ao passar o mouse)
+const SIGLAS = {
+  "Análise e Desenvolvimento de Sistemas": "ADS",
+  "Segurança da Informação": "Segurança da Info.",
+  "Ciência de Dados": "Ciência de Dados",
+  "Gestão da Tecnologia da Informação": "Gestão de TI",
+  "Inteligência Artificial e Machine Learning": "IA e Machine Learning",
+  "Publicidade e Marketing": "Publicidade e Mkt",
+};
 const TOTAL_CERTIFICADOS = 27;
 
 const corpoPlanilha = $("#planilha-corpo");
@@ -582,7 +591,7 @@ const btnCert = $("#btn-certificados");
 function montarPlanilha() {
   corpoPlanilha.innerHTML = INSCRITOS.map(
     ([nome, curso, presente], i) =>
-      `<tr><td>${i + 2}</td><td>${nome}</td><td>${curso}</td><td class="${presente === "Sim" ? "sim" : "nao"}">${presente}</td></tr>`
+      `<tr><td>${i + 2}</td><td>${nome}</td><td title="${curso}">${SIGLAS[curso] || curso}</td><td class="${presente === "Sim" ? "sim" : "nao"}">${presente}</td></tr>`
   ).join("") + `<tr><td>⋮</td><td colspan="3" style="color:#8a93a6">+ 20 linhas</td></tr>`;
 }
 montarPlanilha();
@@ -647,7 +656,7 @@ $$(".zoomavel").forEach((img) => img.addEventListener("click", () => abrirLightb
 /* ==========================================================
    12. FINAL: palavra que troca + QR code + confete
    ========================================================== */
-const PALAVRAS = ["sua área", "Administração", "Pedagogia", "Engenharia", "Design", "Saúde", "Direito", "Computação", "sua vida"];
+const PALAVRAS = ["sua área", "Segurança da Informação", "Ciência de Dados", "Gestão de TI", "Inteligência Artificial", "Publicidade", "Análise de Sistemas", "sua vida"];
 const rotativo = $("#rotativo");
 let idxPalavra = 0;
 setInterval(() => {
