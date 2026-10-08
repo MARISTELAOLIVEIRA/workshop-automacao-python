@@ -339,8 +339,8 @@ mark {
 
 /* ============ 5. Áreas ============ */
 .areas-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(12px, 1.6vw, 20px); margin-top: 18px; }
-.areas-grid .area-card { flex: 0 0 calc((100% - 3 * clamp(12px, 1.6vw, 20px)) / 4); }
-.area-card { perspective: 900px; height: clamp(120px, 21vh, 180px); outline: none; cursor: pointer; }
+.areas-grid .area-card { flex: 0 0 calc((100% - 4 * clamp(12px, 1.6vw, 20px)) / 5); }
+.area-card { perspective: 900px; height: clamp(120px, 22vh, 190px); outline: none; cursor: pointer; }
 .area-inner {
   position: relative; width: 100%; height: 100%;
   transition: transform .7s cubic-bezier(.3,1.3,.5,1); transform-style: preserve-3d;
@@ -357,7 +357,7 @@ mark {
 .area-verso {
   transform: rotateY(180deg);
   background: linear-gradient(135deg, var(--azul-forte), #24507a);
-  font-size: clamp(14px, 1.25vw, 17px); line-height: 1.35; font-weight: 500;
+  font-size: clamp(13px, 1.15vw, 16px); line-height: 1.35; font-weight: 500;
 }
 .area-voce .area-frente { border-color: rgba(255,212,59,.5); background: rgba(255,212,59,.08); }
 .area-voce .area-verso { background: linear-gradient(135deg, #b8860b, #e0a800); color: #1a1405; }

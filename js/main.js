@@ -560,16 +560,16 @@ addEventListener("resize", () => {
    10. DEMO: CERTIFICADOS
    ========================================================== */
 const INSCRITOS = [
-  ["Ana Costa Rodrigues", "Segurança da Informação", "Sim"],
-  ["Bruno Oliveira Rocha", "Gestão da Tecnologia da Informação", "Sim"],
-  ["Camila Santos Barbosa", "Segurança da Informação", "Sim"],
-  ["Diego Carvalho Nascimento", "Análise e Desenvolvimento de Sistemas", "Sim"],
+  ["Ana Costa Rodrigues", "Inteligência Artificial e Machine Learning", "Sim"],
+  ["Bruno Oliveira Rocha", "Gestão Comercial", "Sim"],
+  ["Camila Santos Barbosa", "Análise e Desenvolvimento de Sistemas", "Sim"],
+  ["Diego Carvalho Nascimento", "Segurança da Informação", "Sim"],
   ["Eduarda Rocha Carvalho", "Inteligência Artificial e Machine Learning", "Não"],
-  ["Felipe Souza Pereira", "Publicidade e Marketing", "Sim"],
-  ["Gabriela Santos Dias", "Inteligência Artificial e Machine Learning", "Sim"],
-  ["Henrique Pereira Santos", "Segurança da Informação", "Não"],
-  ["Isabela Gomes Carvalho", "Gestão da Tecnologia da Informação", "Sim"],
-  ["João Dias Gomes", "Análise e Desenvolvimento de Sistemas", "Não"],
+  ["Felipe Souza Pereira", "Ciência de Dados", "Sim"],
+  ["Gabriela Santos Dias", "Gestão de Recursos Humanos", "Sim"],
+  ["Henrique Pereira Santos", "Gestão da Tecnologia da Informação", "Não"],
+  ["Isabela Gomes Carvalho", "Publicidade e Marketing", "Sim"],
+  ["João Dias Gomes", "Segurança da Informação", "Não"],
 ];
 // siglas para caber na tabela da demo (o nome completo aparece ao passar o mouse)
 const SIGLAS = {
@@ -579,6 +579,8 @@ const SIGLAS = {
   "Gestão da Tecnologia da Informação": "Gestão de TI",
   "Inteligência Artificial e Machine Learning": "IA e Machine Learning",
   "Publicidade e Marketing": "Publicidade e Mkt",
+  "Gestão Comercial": "Gestão Comercial",
+  "Gestão de Recursos Humanos": "Gestão de RH",
 };
 const TOTAL_CERTIFICADOS = 27;
 
@@ -656,7 +658,7 @@ $$(".zoomavel").forEach((img) => img.addEventListener("click", () => abrirLightb
 /* ==========================================================
    12. FINAL: palavra que troca + QR code + confete
    ========================================================== */
-const PALAVRAS = ["sua área", "Segurança da Informação", "Ciência de Dados", "Gestão de TI", "Inteligência Artificial", "Publicidade", "Análise de Sistemas", "sua vida"];
+const PALAVRAS = ["sua área", "Segurança da Informação", "Ciência de Dados", "Gestão de TI", "Inteligência Artificial", "Publicidade", "Análise de Sistemas", "Gestão Comercial", "Recursos Humanos", "sua vida"];
 const rotativo = $("#rotativo");
 let idxPalavra = 0;
 setInterval(() => {
