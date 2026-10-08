@@ -248,11 +248,11 @@
         </ol>
         <div class="massa-grid">
           <div class="como-rodar reveal" style="--d:.5s">
-            <h3>Como rodar um script</h3>
+            <h3>Como rodar um script no VS Code</h3>
             <div class="passos">
-              <div class="passo"><span class="num">1</span>Botão direito no arquivo <code>.py</code></div>
-              <div class="passo"><span class="num">2</span><b>Edit with IDLE</b><small>(Windows 11: "Mostrar mais opções")</small></div>
-              <div class="passo"><span class="num">3</span>Aperte <kbd class="kbd-grande">F5</kbd></div>
+              <div class="passo"><span class="num">1</span>No VS Code: <b>Arquivo → Abrir Pasta</b><small>(a pasta do material)</small></div>
+              <div class="passo"><span class="num">2</span>Clique no arquivo <code>.py</code> na barra lateral</div>
+              <div class="passo"><span class="num">3</span>Clique no <span class="vsc-play" aria-label="botão Run Python File">▶</span><small>(canto superior direito)</small></div>
             </div>
             <p class="lacuna-dica">Preencha as lacunas <code class="lacuna">___</code>. Se aparecer <code>NameError: name '___'</code>, é só sinal de que falta completar alguma!</p>
           </div>
@@ -274,14 +274,15 @@
         <h2 class="reveal" style="--d:.1s">Calma, <span class="hl">erro faz parte</span> 😅</h2>
         <div class="erros">
           <details class="reveal" style="--d:.15s"><summary><code>NameError: name '___' is not defined</code></summary><p>Ainda tem lacuna sem preencher. Procure os <code>___</code> no arquivo.</p></details>
-          <details class="reveal" style="--d:.2s"><summary><code>ModuleNotFoundError: No module named 'pandas'</code></summary><p>Falta instalar a biblioteca. No terminal: <code>py -m pip install --user pandas openpyxl</code></p></details>
-          <details class="reveal" style="--d:.25s"><summary><code>'py' não é reconhecido como um comando...</code></summary><p>Troque <code>py</code> por <code>python</code>. Ou abra o arquivo pelo IDLE e aperte F5.</p></details>
+          <details class="reveal" style="--d:.2s"><summary><code>ModuleNotFoundError: No module named 'pandas'</code></summary><p>Falta instalar a biblioteca. Rode o <code>verificar_ambiente.py</code> pelo ▶ e responda <code>s</code>: ele instala tudo no Python certo.</p></details>
+          <details class="reveal" style="--d:.25s"><summary>O botão <code>▶</code> não aparece no VS Code</summary><p>Falta a extensão Python. Aperte <code>Ctrl+Shift+X</code>, procure <b>Python</b> (da Microsoft) e clique em Instalar.</p></details>
           <details class="reveal" style="--d:.3s"><summary><code>FileNotFoundError: ... pasta_baguncada</code></summary><p>Rode primeiro o <code>criar_bagunca.py</code>.</p></details>
           <details class="reveal" style="--d:.35s"><summary><code>PermissionError</code> ao gerar o PDF</summary><p>O certificado está aberto no leitor de PDF. Feche e rode de novo.</p></details>
           <details class="reveal" style="--d:.4s"><summary><code>IndentationError</code></summary><p>Os espaços no começo da linha estão desalinhados. Em Python, o alinhamento importa!</p></details>
           <details class="reveal" style="--d:.45s"><summary><code>KeyError: 'Nome'</code></summary><p>O nome da coluna está diferente da planilha. Confira maiúsculas e acentos.</p></details>
+          <details class="reveal" style="--d:.5s"><summary>Instalei, mas continua dando <code>ModuleNotFoundError</code></summary><p>O VS Code está usando outro Python. <code>Ctrl+Shift+P</code> → <b>Python: Select Interpreter</b>, escolha o Python 3 e rode o <code>verificar_ambiente.py</code> de novo.</p></details>
         </div>
-        <p class="nota reveal" style="--d:.5s">Ainda travado? Levante a mão ✋ e chame quem está circulando pela sala.</p>
+        <p class="nota reveal" style="--d:.55s">Ainda travado? Levante a mão ✋ e chame quem está circulando pela sala.</p>
       </div>
     </section>
 

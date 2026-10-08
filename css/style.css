@@ -521,8 +521,13 @@ mark {
   display: flex; align-items: center; justify-content: center;
   background: var(--azul-forte); font-weight: 700;
 }
-.kbd-grande { font-size: 18px; padding: 3px 12px; animation: tecla 1.6s ease-in-out infinite; }
-@keyframes tecla { 0%, 70%, 100% { transform: none; border-bottom-width: 3px; } 80% { transform: translateY(2px); border-bottom-width: 1px; } }
+.vsc-play {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 26px; border-radius: 5px; font-size: 13px;
+  background: #1f1f1f; color: #89d185; border: 1px solid #3c3c3c;
+  animation: clicar 1.8s ease-in-out infinite;
+}
+@keyframes clicar { 0%, 65%, 100% { transform: none; box-shadow: 0 0 0 0 rgba(137,209,133,.5); } 75% { transform: scale(.88); box-shadow: 0 0 0 8px rgba(137,209,133,0); } }
 .lacuna-dica { font-size: 14px; color: #c3cce6; }
 .lacuna { background: rgba(255,212,59,.18); color: var(--amarelo); padding: 0 6px; border-radius: 4px; }
 .bonus-preview img { border-radius: 10px; background: #fff; max-height: 30vh; width: auto; margin: 0 auto; cursor: zoom-in; transition: transform .3s; }
