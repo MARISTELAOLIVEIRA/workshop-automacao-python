@@ -106,9 +106,9 @@ kbd {
 
 /* ============ Selo da professora ============ */
 .professora {
-  position: fixed; top: 16px; left: 20px; z-index: 55;
-  display: flex; align-items: center; gap: 11px;
-  padding: 5px 18px 5px 5px; border-radius: 999px; text-align: left;
+  position: fixed; top: 16px; right: 20px; z-index: 55;
+  display: flex; flex-direction: row-reverse; align-items: center; gap: 11px;
+  padding: 5px 5px 5px 18px; border-radius: 999px; text-align: right;
   background: rgba(16, 24, 47, .72); border: 1px solid var(--borda);
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
@@ -116,7 +116,7 @@ kbd {
   transition: border-color .3s, box-shadow .3s;
 }
 .professora:hover { border-color: rgba(255,212,59,.5); box-shadow: 0 12px 36px rgba(255,212,59,.18); }
-@keyframes entrarSelo { from { opacity: 0; transform: translateX(-40px); } }
+@keyframes entrarSelo { from { opacity: 0; transform: translateX(40px); } }
 @keyframes flutuar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 .prof-avatar {
   position: relative; flex: none;
@@ -603,7 +603,7 @@ mark {
   .mesa-arquivos { bottom: 150px; }
   .pasta { width: 30%; }
   .scroll-hint { display: none; }
-  .professora { top: 12px; left: 12px; padding-right: 14px; }
+  .professora { top: 12px; right: 12px; padding-left: 14px; }
   .prof-avatar { width: 40px; height: 40px; }
   .prof-texto b { font-size: 13px; }
   .prof-texto small { font-size: 11px; }
